@@ -3,7 +3,7 @@ import { CartContext } from "../context/CartContext";
 import axios from "axios"; // ✅ Import axios for backend requests
 
 function Checkout() {
-  const [orderPlaced, setOrderPlaced] = useState(false);
+  
   const { cart, clearCart } = useContext(CartContext); // ✅ clearCart optional
   const [customer, setCustomer] = useState({
     name: "",
@@ -58,16 +58,19 @@ const handleOrder = async () => {
   try {
     await axios.post("http://localhost:5000/api/orders", {
       customer,
-      items: cart,
-      total: cart.reduce((acc, item) => acc + item.price * item.qty, 0)
+      cart,
+      total
     });
 
-    alert("Order placed successfully!");
-    setCustomer({ name: "", email: "", phone: "", address: "" });
-    clearCart(); // Cart context me ek function add karo items clear karne ke liye
+   alert("Order placed successfully!");
+
+clearCart(); // ✅ cart empty
+
+setOrderPlaced(true);
+
   } catch (err) {
-    console.log(err);
-    alert("Error placing order!");
+    console.error(err);
+    alert("Error placing order");
   }
 };
 
@@ -83,15 +86,8 @@ const handleOrder = async () => {
     <div className="p-10 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Checkout</h1>
 
-      {orderPlaced ? (
-  <div className="text-center">
-    <h2 className="text-3xl font-bold text-green-600">
-      🎉 Order Placed Successfully!
-    </h2>
-    <p className="mt-4">Thank you for your purchase ❤️</p>
-  </div>
-) : cart.length === 0 ? (
-  <p>Your cart is empty</p>
+      {cart.length === 0 ? (
+        <p>Your cart is empty</p>
       ) : (
         <div>
 
