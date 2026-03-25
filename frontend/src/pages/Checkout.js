@@ -66,7 +66,7 @@ const handleOrder = async () => {
 
 clearCart(); // ✅ cart empty
 
-setOrderPlaced(true);
+
 
   } catch (err) {
     console.error(err);
